@@ -90,6 +90,9 @@ details.past summary small{font-size:12px;text-transform:none;letter-spacing:0;m
 .setup{display:grid;gap:12px}
 .setup label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
 .setup input{font:inherit;font-size:16px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.setup .show{display:flex;flex-direction:row;align-items:center;gap:8px;font-size:14px}
+.setup .show input{width:18px;height:18px;padding:0}
+.vh{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .btn{font-weight:700;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:12px 16px;cursor:pointer}
 .msg{font-size:14px;color:var(--muted)}
 .msg.err{color:var(--warn)}
@@ -102,11 +105,11 @@ details.past summary small{font-size:12px;text-transform:none;letter-spacing:0;m
 <div class="app">
   <div class="bar"><h1>Reise<span>.</span></h1><div class="upd"><span id="upd"></span><button class="icon-btn" id="refresh" aria-label="Oppdater"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button></div></div>
   <main id="out"><div class="empty">Laster …</div></main>
-  <div class="foot"><span id="ver"></span> · <button id="reset" type="button">Nullstill oppsett</button></div>
+  <div class="foot"><span id="ver"></span> · <button id="reset" type="button">Logg ut</button></div>
 </div>
 <script>
 (function(){
-const VERSION='1.0';
+const VERSION='1.2';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ICONS={flight:'<svg viewBox="0 0 24 24"><path d="M2 16l20-6-2-3-7 2-5-5-2 1 3 6-5 1.5-2-2-1.5.5 1.5 4z"/><path d="M3 21h18"/></svg>',
@@ -123,8 +126,11 @@ const MO=['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des
 
 // ---------- config ----------
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
-let cfg=null; try{cfg=JSON.parse(ls.get('rl-cfg')||'null')}catch(e){}
-if(location.hash.length>1){const h=new URLSearchParams(location.hash.slice(1)); if(h.get('s')&&h.get('k')){cfg={sheet:h.get('s'),key:h.get('k')}; ls.set('rl-cfg',JSON.stringify(cfg)); ls.del('rl-blob');} history.replaceState(null,'',location.pathname+location.search);}
+const SHEET='18OWnWC3f5lPGgOS5ujbhDHLwbG6ZlEy3t5JiKZELEB4'; // hvor dataene ligger (ikke hemmelig)
+let cfg=null; try{cfg=JSON.parse(ls.get('rl-cfg')||'null')}catch(e){} if(cfg&&!cfg.sheet)cfg.sheet=SHEET;
+function readHash(){ if(location.hash.length>1){const h=new URLSearchParams(location.hash.slice(1)); if(h.get('k')){cfg={sheet:h.get('s')||SHEET,key:h.get('k')}; ls.set('rl-cfg',JSON.stringify(cfg)); ls.del('rl-blob');} history.replaceState(null,'',location.pathname+location.search);} return !!cfg; }
+readHash();
+window.addEventListener('hashchange',()=>{ if(location.hash.length>1&&readHash()){data=null;const f=document.querySelector('#setup');if(f)f.remove();render();load(true);} });
 
 // ---------- time helpers (all times are local at the place) ----------
 const pad=n=>String(n).padStart(2,'0');
@@ -157,7 +163,7 @@ function jsonp(url){ return new Promise((res,rej)=>{ const cb='__rl'+Date.now();
   function cleanup(){clearTimeout(to);delete window[cb];s.remove();}
   window[cb]=r=>{cleanup(); try{res(r.table.rows[0].c[0].v);}catch(e){rej(e);}}; s.onerror=()=>{cleanup();rej(new Error('net'));};
   s.src=url+'&tqx=out:json;responseHandler:'+cb; document.head.appendChild(s); }); }
-async function fetchBlob(){ const base='https://docs.google.com/spreadsheets/d/'+encodeURIComponent(cfg.sheet)+'/gviz/tq?range=A1&headers=0&_='+Date.now();
+async function fetchBlob(){ const base='https://docs.google.com/spreadsheets/d/'+encodeURIComponent((cfg&&cfg.sheet)||SHEET)+'/gviz/tq?range=A1&headers=0&_='+Date.now();
   try{ const r=await fetch(base+'&tqx=out:csv',{cache:'no-store'}); if(r.ok){const v=csvFirst(await r.text()); if(v.startsWith('RL1.'))return v;} }catch(e){}
   const v=await jsonp(base); if(typeof v==='string'&&v.startsWith('RL1.'))return v; throw new Error('Fant ikke data i arket'); }
 
@@ -205,8 +211,20 @@ function heroHTML(tr){ const td=today(); const live=tr.start<=td; const dN=dBetw
   const chip=live?`Pågår · dag ${Math.min(di,dN)} av ${dN}`:(dd===1?'I morgen':'Om '+dd+' dager');
   return `<section class="hero"><span class="chip">${esc(chip)}</span><h2>${esc(tr.name)}</h2><div class="dates">${esc(fd(tr.start))}${tr.end!==tr.start?' – '+esc(fd(tr.end)):''} · ${dN} dag${dN>1?'er':''}</div>${tr.purpose?`<div class="purpose">${esc(tr.purpose)}</div>`:''}</section>`; }
 function render(){ const out=$('#out'); $('#ver').textContent='Versjon '+VERSION;
-  if(!cfg){ out.innerHTML=`<form class="setup card" id="setup"><b>Koble til reiseloggen</b><span class="msg">Åpne oppsettlenken du fikk fra Claude, eller lim inn verdiene her.</span><label>Data-ID<input name="s" autocomplete="off" required></label><label>Nøkkel<input name="k" autocomplete="off" required></label><button class="btn">Lagre</button></form>`;
-    $('#setup').onsubmit=e=>{e.preventDefault();cfg={sheet:e.target.s.value.trim(),key:e.target.k.value.trim()};ls.set('rl-cfg',JSON.stringify(cfg));ls.del('rl-blob');data=null;load(true);render();}; $('#upd').textContent=''; return; }
+  if(!cfg){ if($('#setup'))return; ls.del('rl-draft');
+    out.innerHTML=`<form class="setup card" id="setup" action="#" method="post" autocomplete="on"><b>Logg inn</b><span class="msg">Skriv inn passordet til reise-appen. Chrome kan lagre det i Google Passordbehandling, så det fylles ut automatisk neste gang.</span>
+      <input type="text" name="username" id="username" autocomplete="username" value="Reise-app" readonly class="vh" tabindex="-1" aria-hidden="true">
+      <label for="password">Passord<input type="password" name="password" id="password" autocomplete="current-password" autocapitalize="off" spellcheck="false"></label>
+      <label class="show"><input type="checkbox" id="showpw"> Vis passord</label>
+      <button class="btn" type="submit">Logg inn</button></form>`;
+    const f=$('#setup'), pw=f.password, msg=f.querySelector('.msg');
+    $('#showpw').onchange=e=>{pw.type=e.target.checked?'text':'password';};
+    const fromLink=()=>{ const v=pw.value; if(/#.*k=/.test(v)){ const h=new URLSearchParams(v.split('#').pop()); if(h.get('k'))pw.value=h.get('k'); } };
+    f.onsubmit=async e=>{ e.preventDefault(); fromLink(); const k=pw.value.trim(); if(!k){msg.textContent='Skriv inn passordet.';msg.classList.add('err');return;}
+      msg.classList.remove('err'); msg.textContent='Sjekker passordet …';
+      try{ const blob=await fetchBlob(); const d=await decrypt(blob,k); cfg={sheet:SHEET,key:k}; ls.set('rl-cfg',JSON.stringify(cfg)); ls.set('rl-blob',blob); data=d; fetchedAt=Date.now(); ls.set('rl-fetched',String(fetchedAt)); lastErr=''; render(); }
+      catch(err){ msg.classList.add('err'); msg.textContent=err&&err.name==='OperationError'?'Feil passord. Prøv igjen.':'Fikk ikke kontakt med dataene. Sjekk nettet og prøv igjen.'; } };
+    $('#upd').textContent=''; return; }
   const upd=$('#upd'); upd.textContent=fetchedAt?('Oppdatert '+new Date(fetchedAt).toLocaleString('no-NO',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})):'';
   if(!data){ out.innerHTML=`<div class="empty">${lastErr?`<span class="msg err">${esc(lastErr)}</span>`:'Henter reisen din …'}</div>`; return; }
   const td=today(); const T=(data.trips||[]).filter(tr=>tr.end>=td).sort((a,b)=>a.start.localeCompare(b.start));
@@ -221,7 +239,7 @@ function render(){ const out=$('#out'); $('#ver').textContent='Versjon '+VERSION
 
 document.addEventListener('click',async e=>{ const b=e.target.closest('[data-copy]'); if(!b)return; try{await navigator.clipboard.writeText(b.dataset.copy); b.classList.add('copied'); setTimeout(()=>b.classList.remove('copied'),1200);}catch(x){} });
 $('#refresh').onclick=()=>load(true);
-$('#reset').onclick=()=>{ if(confirm('Fjerne oppsett og lagrede data fra denne telefonen?')){ls.del('rl-cfg');ls.del('rl-blob');ls.del('rl-fetched');cfg=null;data=null;fetchedAt=0;render();} };
+$('#reset').onclick=()=>{ if(confirm('Logge ut og fjerne lagrede reisedata fra denne telefonen?')){ls.del('rl-cfg');ls.del('rl-blob');ls.del('rl-fetched');cfg=null;data=null;fetchedAt=0;render();} };
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden){render();load(false);} });
 setInterval(()=>{ if(!document.hidden)render(); },60000);
 setInterval(()=>{ if(!document.hidden)load(false); },15*60000);
