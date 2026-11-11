@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151a24">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<title>Reise</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{--bg:#f3f4f6;--surface:#fff;--ink:#151a24;--muted:#5d6574;--line:#dde0e6;--sign:#f2b705;--sign-ink:#151a24;--warn:#c2410c;--ok:#15803d;--hero:#151a24;--hero-ink:#f3f4f6;--hero-muted:#b9c0cc;
+  --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;--body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f131a;--surface:#171c25;--ink:#e8eaee;--muted:#9aa2b1;--line:#2a313d;--warn:#fb923c;--ok:#4ade80;--hero:#1d2430}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.4;-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit}
+.app{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 32px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.bar h1{margin:0;font-size:22px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.bar h1 span{color:var(--sign)}
+.upd{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn.spin svg{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.hero{background:var(--hero);color:var(--hero-ink);border-radius:14px;padding:16px;margin-bottom:12px}
+.hero .chip{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--sign);color:var(--sign-ink);border-radius:4px;padding:2px 8px}
+.hero h2{margin:8px 0 2px;font-size:28px;line-height:1.1;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.hero .dates{font-family:var(--mono);font-size:14px;color:var(--hero-muted)}
+.hero .purpose{font-size:14px;color:var(--hero-muted);margin-top:2px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.card.next{border:2px solid var(--sign)}
+.lbl{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.next .lbl{color:var(--ink)}
+.cd{display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;background:var(--sign);color:var(--sign-ink);border-radius:4px;padding:2px 8px;margin-left:6px}
+.cd.warn{background:var(--warn);color:#fff}
+.nt{display:flex;align-items:center;gap:10px;margin:10px 0 4px;font-size:22px;font-weight:700;line-height:1.2}
+.nt .ico{flex:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.nt .ico.h{border-color:var(--sign)}
+.ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.big-time{font-family:var(--mono);font-size:20px;font-weight:600;margin:2px 0 8px}
+.big-time s{color:var(--muted);font-weight:400;font-size:15px}
+.big-time .act{color:var(--warn)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px}
+.facts dt{color:var(--muted);font-size:13px;padding-top:2px}
+.facts dd{margin:0;overflow-wrap:anywhere}
+.ref{font-family:var(--mono);font-weight:600;border:1px dashed var(--muted);border-radius:6px;padding:2px 8px;background:transparent;cursor:pointer}
+.ref.copied{border-style:solid;border-color:var(--ok);color:var(--ok)}
+.fno{font-family:var(--mono);font-size:13px;font-weight:600;background:var(--ink);color:var(--bg);border-radius:4px;padding:1px 6px;margin-right:6px;white-space:nowrap}
+.maplink{color:inherit}
+.tl{margin-top:4px}
+.tl h3{margin:20px 0 8px;font-size:13px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tl h3.today{color:var(--ink)}
+.leg{display:grid;grid-template-columns:58px 36px minmax(0,1fr);gap:10px;align-items:start;padding:10px 0;position:relative}
+.leg::before{content:"";position:absolute;left:calc(58px + 10px + 17px);top:0;bottom:0;width:2px;background:var(--line)}
+.leg .t{font-family:var(--mono);font-size:15px;font-weight:600;line-height:1.25}
+.leg .t small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.leg .t s{color:var(--muted);font-weight:400;font-size:12px;display:block}
+.leg .t .act{color:var(--warn)}
+.leg .ico{position:relative;z-index:1;width:36px;height:36px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center}
+.leg.hotel .ico{border-color:var(--sign)}
+.leg .ti{font-weight:600;font-size:16px;line-height:1.3}
+.leg .su{font-size:13px;color:var(--muted);margin-top:2px;display:flex;flex-wrap:wrap;gap:2px 10px}
+.leg .nb{font-size:13px;color:var(--muted);margin-top:4px}
+.leg.done .ti,.leg.done .t{color:var(--muted)}
+.leg.done .fno{background:var(--muted)}
+.leg.done .ico{filter:grayscale(1);opacity:.6}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;border:1px solid currentColor;border-radius:4px;padding:1px 6px;margin-top:6px;margin-right:6px}
+.badge.cur{background:var(--sign);color:var(--sign-ink);border-color:var(--sign)}
+.badge.warn{color:var(--warn)}
+.badge.ok{color:var(--ok)}
+.lay{font-family:var(--mono);font-size:12px;color:var(--muted);padding:2px 0 2px 104px}
+.lay.tight{color:var(--warn)}
+.now{position:relative;z-index:2;height:2px;background:var(--sign);margin:8px 0}
+.now span{position:absolute;left:0;top:-10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--sign);color:var(--sign-ink);border-radius:4px;padding:2px 8px}
+details.more{margin-top:8px}
+details.more summary{cursor:pointer;list-style:none;font-weight:600;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary small{display:block;font-weight:400;color:var(--muted);font-family:var(--mono);font-size:13px}
+details.more[open] summary{border-radius:14px 14px 0 0}
+details.more .inner{background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;padding:0 16px 8px}
+details.past summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 0;border-bottom:1px dashed var(--line)}
+details.past summary::-webkit-details-marker{display:none}
+details.past summary::before{content:"▸ "}
+details.past[open] summary::before{content:"▾ "}
+details.past summary small{font-size:12px;text-transform:none;letter-spacing:0;margin-left:6px}
+.setup{display:grid;gap:12px}
+.setup label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.setup input{font:inherit;font-size:16px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{font-weight:700;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:12px 16px;cursor:pointer}
+.msg{font-size:14px;color:var(--muted)}
+.msg.err{color:var(--warn)}
+.empty{text-align:center;color:var(--muted);padding:40px 16px}
+.foot{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+.foot button{background:none;border:0;text-decoration:underline;color:inherit;cursor:pointer;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar"><h1>Reise<span>.</span></h1><div class="upd"><span id="upd"></span><button class="icon-btn" id="refresh" aria-label="Oppdater"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button></div></div>
+  <main id="out"><div class="empty">Laster …</div></main>
+  <div class="foot"><span id="ver"></span> · <button id="reset" type="button">Nullstill oppsett</button></div>
+</div>
+<script>
+(function(){
+const VERSION='1.0';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ICONS={flight:'<svg viewBox="0 0 24 24"><path d="M2 16l20-6-2-3-7 2-5-5-2 1 3 6-5 1.5-2-2-1.5.5 1.5 4z"/><path d="M3 21h18"/></svg>',
+ hotel:'<svg viewBox="0 0 24 24"><path d="M3 18V7"/><path d="M3 14h18v4"/><path d="M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/></svg>',
+ train:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><path d="M8 20l-2 2"/><path d="M16 20l2 2"/><circle cx="9" cy="13" r=".5"/><circle cx="15" cy="13" r=".5"/></svg>',
+ ferry:'<svg viewBox="0 0 24 24"><path d="M2 20c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/><path d="M4 16l2-6h12l2 6"/><path d="M9 10V6h6v4"/></svg>',
+ car:'<svg viewBox="0 0 24 24"><path d="M5 17h14v-5l-2-5H7l-2 5z"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/></svg>',
+ bus:'<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="15" rx="2"/><path d="M4 11h16"/><circle cx="8" cy="15" r=".5"/><circle cx="16" cy="15" r=".5"/><path d="M7 21v-3M17 21v-3"/></svg>',
+ restaurant:'<svg viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 0 0 4 0V3"/><path d="M9 11v10"/><path d="M17 3c-2 2-2 6 0 8v10"/></svg>',
+ bar:'<svg viewBox="0 0 24 24"><path d="M5 4h14l-7 9z"/><path d="M12 13v7"/><path d="M8 20h8"/></svg>',
+ visit:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>'};
+const WD=['søn','man','tir','ons','tor','fre','lør'];
+const MO=['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
+
+// ---------- config ----------
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let cfg=null; try{cfg=JSON.parse(ls.get('rl-cfg')||'null')}catch(e){}
+if(location.hash.length>1){const h=new URLSearchParams(location.hash.slice(1)); if(h.get('s')&&h.get('k')){cfg={sheet:h.get('s'),key:h.get('k')}; ls.set('rl-cfg',JSON.stringify(cfg)); ls.del('rl-blob');} history.replaceState(null,'',location.pathname+location.search);}
+
+// ---------- time helpers (all times are local at the place) ----------
+const pad=n=>String(n).padStart(2,'0');
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());};
+const nowL=()=>{const d=new Date();return today()+'T'+pad(d.getHours())+':'+pad(d.getMinutes());};
+const day=s=>(s||'').slice(0,10), time=s=>(s&&s.length>10)?s.slice(11,16):'';
+const ms=s=>{const [y,m,d]=s.slice(0,10).split('-').map(Number);const [H,M]=(s.slice(11,16)||'00:00').split(':').map(Number);return Date.UTC(y,m-1,d,H,M);};
+const dBetween=(a,b)=>Math.round((ms(b)-ms(a))/864e5);
+const fd=s=>{const [y,m,d]=day(s).split('-').map(Number);const dt=new Date(y,m-1,d);return WD[dt.getDay()]+' '+d+'. '+MO[m-1];};
+const lastDay=t=>day(t.end)||day(t.start);
+const dep=t=>t.dep_actual||t.start, arr=t=>t.arr_actual||t.end;
+const fmtMin=m=>{m=Math.abs(m);return m<60?m+' min':Math.floor(m/60)+' t'+(m%60?' '+pad(m%60)+' min':'');};
+function delay(t){ if(t.arr_actual&&time(t.end))return Math.round((ms(t.arr_actual)-ms(t.end))/6e4); if(t.dep_actual&&time(t.start))return Math.round((ms(t.dep_actual)-ms(t.start))/6e4); return null; }
+function state(t){ const n=nowL(), td=today();
+  if(t.type==='hotel'){ const co=day(t.end); if(!co)return day(t.start)<=td?'cur':''; if(co+'T'+(time(t.end)||'12:00')<=n)return 'done'; return day(t.start)<=td?'cur':''; }
+  const e=arr(t)||dep(t); const done=time(e)?e.slice(0,16)<=n:lastDay(t)<td; if(done)return 'done'; return time(dep(t))&&dep(t).slice(0,16)<=n?'cur':''; }
+function countdown(t){ const s=dep(t); if(!time(s)){const d=dBetween(today(),day(s)); return d<=0?'i dag':d===1?'i morgen':'om '+d+' dager';}
+  const m=Math.round((ms(s)-ms(nowL()))/6e4); if(m<60)return 'om '+Math.max(0,m)+' min'; if(m<1440)return 'om '+Math.floor(m/60)+' t '+pad(m%60)+' min'; const d=dBetween(today(),day(s)); return d===1?'i morgen':'om '+d+' dager'; }
+const fno=t=>t.type==='flight'?(t.flight_no||((t.notes||'').match(/\b([A-Z]{2}|[A-Z]\d|\d[A-Z])\s?(\d{1,4})\b/)||[]).slice(1).join('')):'';
+const legCmp=(a,b)=>day(a.start).localeCompare(day(b.start))||((a.type==='hotel')-(b.type==='hotel'))||(time(a.start)||'99').localeCompare(time(b.start)||'99');
+
+// ---------- crypto + data ----------
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function decrypt(blob,pass){ const p=blob.trim().split('.'); if(p[0]!=='RL1')throw new Error('format');
+  const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(p[1]),iterations:210000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(p[2])},key,b64(p[3])); return JSON.parse(new TextDecoder().decode(pt)); }
+function csvFirst(txt){ txt=txt.trim(); if(txt.startsWith('"')){let i=1,o='';while(i<txt.length){if(txt[i]==='"'){if(txt[i+1]==='"'){o+='"';i+=2;continue;}break;}o+=txt[i++];}return o;} return txt.split(/[\n,]/)[0]; }
+function jsonp(url){ return new Promise((res,rej)=>{ const cb='__rl'+Date.now(); const s=document.createElement('script'); const to=setTimeout(()=>{cleanup();rej(new Error('timeout'));},15000);
+  function cleanup(){clearTimeout(to);delete window[cb];s.remove();}
+  window[cb]=r=>{cleanup(); try{res(r.table.rows[0].c[0].v);}catch(e){rej(e);}}; s.onerror=()=>{cleanup();rej(new Error('net'));};
+  s.src=url+'&tqx=out:json;responseHandler:'+cb; document.head.appendChild(s); }); }
+async function fetchBlob(){ const base='https://docs.google.com/spreadsheets/d/'+encodeURIComponent(cfg.sheet)+'/gviz/tq?range=A1&headers=0&_='+Date.now();
+  try{ const r=await fetch(base+'&tqx=out:csv',{cache:'no-store'}); if(r.ok){const v=csvFirst(await r.text()); if(v.startsWith('RL1.'))return v;} }catch(e){}
+  const v=await jsonp(base); if(typeof v==='string'&&v.startsWith('RL1.'))return v; throw new Error('Fant ikke data i arket'); }
+
+let data=null, fetchedAt=Number(ls.get('rl-fetched')||0), loading=false, lastErr='';
+async function load(force){ if(!cfg)return; const cached=ls.get('rl-blob');
+  if(cached&&!data){ try{data=await decrypt(cached,cfg.key);}catch(e){} render(); }
+  if(loading)return; if(!force&&data&&Date.now()-fetchedAt<10*60e3)return;
+  loading=true; $('#refresh').classList.add('spin'); lastErr='';
+  try{ const blob=await fetchBlob(); const d=await decrypt(blob,cfg.key); data=d; ls.set('rl-blob',blob); fetchedAt=Date.now(); ls.set('rl-fetched',String(fetchedAt)); }
+  catch(e){ lastErr=e&&e.name==='OperationError'?'Feil nøkkel – data kan ikke låses opp.':(navigator.onLine?'Kunne ikke hente nye data.':'Frakoblet – viser sist lagrede data.'); }
+  loading=false; $('#refresh').classList.remove('spin'); render(); }
+
+// ---------- render ----------
+function legRow(t,live){ const st=live?state(t):''; const dl=delay(t); const h=t.type==='hotel';
+  const da=t.dep_actual&&t.dep_actual!==t.start&&time(t.dep_actual), aa=t.arr_actual&&t.arr_actual!==t.end&&time(t.arr_actual);
+  let tc=''; if(h)tc='<small>Innsjekk</small>'; else if(time(t.start)){ tc=da?`<s>${esc(time(t.start))}</s><span class="act">${esc(time(t.dep_actual))}</span>`:esc(time(t.start)); if(time(t.end)&&(t.type==='flight'||t.type==='train'||aa))tc+=aa?`<small>→ <span class="act">${esc(time(t.arr_actual))}</span></small>`:`<small>→ ${esc(time(t.end))}${dBetween(day(t.start),day(t.end))>0?'<sup>+'+dBetween(day(t.start),day(t.end))+'</sup>':''}</small>`; }
+  const su=[t.provider&&esc(t.provider), t.ref&&`<button type="button" class="ref" data-copy="${esc(t.ref)}">${esc(t.ref)}</button>`, h&&t.end&&('Utsjekk '+esc(fd(t.end))+(time(t.end)?' '+esc(time(t.end)):'')), (t.with&&t.with.length)&&('med '+esc(t.with.join(', ')))].filter(Boolean);
+  const bd=[]; if(st==='cur')bd.push(`<span class="badge cur">${h?'Bor her nå':'Pågår'}</span>`); if(dl!=null&&dl>=5)bd.push(`<span class="badge warn">Forsinket ${esc(fmtMin(dl))}</span>`); else if(dl!=null&&dl<=-5)bd.push(`<span class="badge ok">Tidlig ${esc(fmtMin(dl))}</span>`);
+  return `<div class="leg ${t.type}${st?' '+st:''}"><div class="t">${tc}</div><div class="ico" aria-hidden="true">${ICONS[t.type]||ICONS.visit}</div><div><div class="ti">${fno(t)?`<span class="fno">${esc(fno(t))}</span>`:''}${esc(t.title)}</div>${su.length?`<div class="su">${su.map(x=>`<span>${x}</span>`).join('')}</div>`:''}${t.notes&&!/^[A-Z0-9]{2}\d+[, ]*$/.test(t.notes)?`<div class="nb">${esc(t.notes)}</div>`:''}${bd.join('')}</div></div>`; }
+function layRow(a,b){ if(!a||!b||!time(arr(a)||'')||!time(dep(b)))return ''; const m=Math.round((ms(dep(b))-ms(arr(a)))/6e4); if(m>12*60)return ''; if(m<0)return '<div class="lay tight">Bytte · rakk du det? Ankom etter neste avgang</div>';
+  const tight=m<60; return `<div class="lay${tight?' tight':''}">Bytte${a.to?' i '+esc(a.to):''} · ${Math.floor(m/60)}t ${pad(m%60)}m${tight?' · knapt':''}</div>`; }
+function timeline(tr,live){ if(live){ const all=tr.legs.slice().sort(legCmp), td0=today(); const past=all.filter(t=>day(t.start)<td0&&state(t)==='done'), rest=all.filter(t=>!past.includes(t));
+    if(past.length>=3)return `<details class="past"><summary>Tidligere i reisen <small>${past.length} ferdige</small></summary>${timelineRaw({legs:past},true,true)}</details>`+timelineRaw({legs:rest},true); }
+  return timelineRaw(tr,live); }
+function timelineRaw(tr,live,noNow){ let h='', cur='', nowDone=!!noNow, lastF=null; const td=today();
+  const NOW=()=>{nowDone=true;return `<div class="now"><span>Nå ${esc(nowL().slice(11))}</span></div>`;};
+  tr.legs.slice().sort(legCmp).forEach(t=>{ const pend=live&&!nowDone&&!state(t); const d=day(t.start);
+    if(pend&&d!==td)h+=NOW();
+    if(t.type==='flight'||t.type==='train'){ h+=layRow(lastF,t); lastF=t; } else if(t.type!=='hotel'&&t.type!=='restaurant'&&t.type!=='bar') lastF=null;
+    if(d!==cur){cur=d; h+=`<h3 class="${d===td?'today':''}">${esc(fd(d))}${d===td?' · i dag':''}</h3>`;}
+    if(pend&&!nowDone)h+=NOW(); h+=legRow(t,live); });
+  if(live&&!nowDone)h+=NOW(); return `<div class="tl">${h}</div>`; }
+function nextCard(tr){ const td=today(), n=nowL(); const L=tr.legs.filter(t=>t.type!=='restaurant'&&t.type!=='bar');
+  const stay=L.find(t=>t.type==='hotel'&&state(t)==='cur'); const prog=L.find(t=>t.type!=='hotel'&&state(t)==='cur');
+  const up=L.filter(t=>t!==stay&&!state(t)).sort((a,b)=>{const k=x=>day(dep(x))+(x.type==='hotel'?'~':' ')+(time(dep(x))||'99');return k(a).localeCompare(k(b));}); const t=prog||up[0];
+  let h=''; if(t){ const dl=delay(t); const da=t.dep_actual&&t.dep_actual!==t.start, aa=t.arr_actual&&t.arr_actual!==t.end;
+    const tm=`${esc(fd(t.start))}${time(t.start)?' '+(da?`<s>${esc(time(t.start))}</s> <span class="act">${esc(time(t.dep_actual))}</span>`:esc(time(t.start))):''}${t.type!=='hotel'&&time(t.end)?' → '+(aa?`<s>${esc(time(t.end))}</s> <span class="act">${esc(time(t.arr_actual))}</span>`:esc(time(t.end))):''}`;
+    const facts=[t.provider&&['Selskap',esc(t.provider)], t.ref&&['Ref',`<button type="button" class="ref" data-copy="${esc(t.ref)}">${esc(t.ref)}</button>`], t.type==='hotel'&&t.location&&['Adresse',`<a class="maplink" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.location)}" target="_blank" rel="noopener">${esc(t.location)}</a>`], t.type==='hotel'&&t.end&&['Utsjekk',esc(fd(t.end))], t.notes&&['Info',esc(t.notes)]].filter(Boolean);
+    h+=`<section class="card next"><div><span class="lbl">${prog?'Nå':'Neste'}</span><span class="cd${dl!=null&&dl>=5?' warn':''}">${esc(prog?('pågår'+(time(arr(t)||'')?' · lander '+time(arr(t)):'')):countdown(t))}</span>${dl!=null&&dl>=5?`<span class="cd warn">+${esc(fmtMin(dl))}</span>`:''}</div>
+      <div class="nt"><span class="ico${t.type==='hotel'?' h':''}" aria-hidden="true">${ICONS[t.type]||ICONS.visit}</span><span>${fno(t)?`<span class="fno">${esc(fno(t))}</span>`:''}${esc(t.title)}</span></div>
+      <div class="big-time">${tm}</div>${facts.length?`<dl class="facts">${facts.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`:''}</section>`; }
+  if(stay&&stay!==t){ h+=`<section class="card"><span class="lbl">Bor nå</span><div class="nt" style="font-size:18px"><span class="ico h" aria-hidden="true">${ICONS.hotel}</span><span>${esc(stay.title)}</span></div><dl class="facts">${stay.location?`<dt>Adresse</dt><dd><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stay.location)}" target="_blank" rel="noopener">${esc(stay.location)}</a></dd>`:''}${stay.end?`<dt>Utsjekk</dt><dd>${esc(fd(stay.end))}${time(stay.end)?' '+esc(time(stay.end)):''}</dd>`:''}${stay.ref?`<dt>Ref</dt><dd><button type="button" class="ref" data-copy="${esc(stay.ref)}">${esc(stay.ref)}</button></dd>`:''}</dl></section>`; }
+  return h; }
+function heroHTML(tr){ const td=today(); const live=tr.start<=td; const dN=dBetween(tr.start,tr.end)+1, di=dBetween(tr.start,td)+1, dd=dBetween(td,tr.start);
+  const chip=live?`Pågår · dag ${Math.min(di,dN)} av ${dN}`:(dd===1?'I morgen':'Om '+dd+' dager');
+  return `<section class="hero"><span class="chip">${esc(chip)}</span><h2>${esc(tr.name)}</h2><div class="dates">${esc(fd(tr.start))}${tr.end!==tr.start?' – '+esc(fd(tr.end)):''} · ${dN} dag${dN>1?'er':''}</div>${tr.purpose?`<div class="purpose">${esc(tr.purpose)}</div>`:''}</section>`; }
+function render(){ const out=$('#out'); $('#ver').textContent='Versjon '+VERSION;
+  if(!cfg){ out.innerHTML=`<form class="setup card" id="setup"><b>Koble til reiseloggen</b><span class="msg">Åpne oppsettlenken du fikk fra Claude, eller lim inn verdiene her.</span><label>Data-ID<input name="s" autocomplete="off" required></label><label>Nøkkel<input name="k" autocomplete="off" required></label><button class="btn">Lagre</button></form>`;
+    $('#setup').onsubmit=e=>{e.preventDefault();cfg={sheet:e.target.s.value.trim(),key:e.target.k.value.trim()};ls.set('rl-cfg',JSON.stringify(cfg));ls.del('rl-blob');data=null;load(true);render();}; $('#upd').textContent=''; return; }
+  const upd=$('#upd'); upd.textContent=fetchedAt?('Oppdatert '+new Date(fetchedAt).toLocaleString('no-NO',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})):'';
+  if(!data){ out.innerHTML=`<div class="empty">${lastErr?`<span class="msg err">${esc(lastErr)}</span>`:'Henter reisen din …'}</div>`; return; }
+  const td=today(); const T=(data.trips||[]).filter(tr=>tr.end>=td).sort((a,b)=>a.start.localeCompare(b.start));
+  const ongoing=T.filter(tr=>tr.start<=td), upcoming=T.filter(tr=>tr.start>td);
+  let h=lastErr?`<div class="msg err" style="margin-bottom:10px">${esc(lastErr)}</div>`:'';
+  if(!T.length){ out.innerHTML=h+'<div class="empty">Ingen reiser planlagt akkurat nå.</div>'; return; }
+  const main=ongoing[0]||upcoming[0]; h+=heroHTML(main)+nextCard(main)+timeline(main,main.start<=td);
+  ongoing.slice(1).forEach(tr=>{h+=heroHTML(tr)+timeline(tr,true);});
+  const nx=ongoing.length?upcoming[0]:upcoming[1];
+  if(nx){ const dd=dBetween(td,nx.start); h+=`<details class="more"><summary>Neste tur: ${esc(nx.name)}<small>${esc(fd(nx.start))} – ${esc(fd(nx.end))} · om ${dd} dager</small></summary><div class="inner">${timeline(nx,false)}</div></details>`; }
+  out.innerHTML=h; }
+
+document.addEventListener('click',async e=>{ const b=e.target.closest('[data-copy]'); if(!b)return; try{await navigator.clipboard.writeText(b.dataset.copy); b.classList.add('copied'); setTimeout(()=>b.classList.remove('copied'),1200);}catch(x){} });
+$('#refresh').onclick=()=>load(true);
+$('#reset').onclick=()=>{ if(confirm('Fjerne oppsett og lagrede data fra denne telefonen?')){ls.del('rl-cfg');ls.del('rl-blob');ls.del('rl-fetched');cfg=null;data=null;fetchedAt=0;render();} };
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden){render();load(false);} });
+setInterval(()=>{ if(!document.hidden)render(); },60000);
+setInterval(()=>{ if(!document.hidden)load(false); },15*60000);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+render(); load(false);
+})();
+</script>
+</body>
+</html>
